@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MetroMessenger</title>
+    <!--    <link rel="stylesheet" href="style/style.css">-->
+</head>
+<body>
+<header>
+    <a href="/"><h1>MetroMessenger</h1></a>
+    <a href="/add">Add a Message</a>
+</header>
+<main>
+    <form id="add-form" method="post">
+        <label for="topic-input">Topic</label>
+        <input id="topic-input" type="text" name="topic" placeholder="Topic" required>
+        <label for="message-input">Message</label>
+        <input id="message-input" type="text" name="msg" placeholder="New message" required>
+        <input type="submit" value="Add a message">
+    </form>
+    <script>
+        const form = document.getElementById('add-form');
+        const submit = document.querySelector('input[type="submit"]');
+        (() => { //immediately invoked function expression
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                console.log(form.msg.value);
+                fetch('/', { // endpoint!!!!!
+                    method: 'POST',
+                    headers: { //tell the server that request body contains JSON data
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ //the actual data from user (topic, message)
+                        topic:form.topic.value,
+                        msg: form.msg.value
+                    })
+
+                })
+                    .then(res => { //handle the response
+                        if (res.status !== 200) {
+                            return Promise.reject(res.text());
+                        }
+                        window.location.href = '/add'; //endpoint!!!!!!!!!!
+                    })
+                    .catch(err => console.error(err));
+            });
+        }).call({});
+    </script>
+</main>
+</body>
+</html></html>
